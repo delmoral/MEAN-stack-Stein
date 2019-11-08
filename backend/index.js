@@ -27,6 +27,7 @@ app.use(multer({storage}).single('image'));
 
 // Routes
 app.use('/api/products',require('./routes/products.routes'));
+app.use('/api/',require('./routes/login.routes'));
 
 // Starting
 app.listen(app.get('port'), () =>{
