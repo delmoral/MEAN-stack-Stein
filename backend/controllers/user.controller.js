@@ -2,8 +2,6 @@ const authService = require('../services/auth.service');
 const Profile = require('../models/profile');
 const bcrypt = require('bcrypt');
 
-const jwt = require('jsonwebtoken');
-
 const userController = {};
 
 userController.singup = (req, res, err) =>{
@@ -25,7 +23,7 @@ userController.singup = (req, res, err) =>{
             console.log(err);
             res.send({
                 ok:false,
-                message: 'Error creando usuario'
+                message: 'Error creating user'
             })
         })
 
@@ -42,7 +40,7 @@ userController.usernameValidate = (req, res, err) =>{
         }).catch((err)=>{
             res.status(200).send({
                 ok:false,
-                message: 'Validating name error'
+                message: 'User unavailable'
             })
         })
 };
@@ -92,8 +90,38 @@ userController.login = (req, res, err) =>{
     })
 };
 
-userController.relogin = () =>{
+userController.relogin = (req, res, err) =>{
+    let userToken = {
+        id: req.user.id,
+        username: req.user.username
+    }
+    let newToken = authService.generateToken(userToken);
 
+    Profile.findOne({_id: req.user.id})
+    .then(profile =>{
+        if(profile === null){
+            res.send({
+                ok: false,
+                message: "User doesnt exist"
+            })
+        }else{
+            res.send({
+                ok:true,
+                profile: {
+                    id:profile.id,
+                    name: profile.name,
+                    userName: profile.userName,
+                    created_at: profile.created_at
+                },
+                token: newToken
+            });
+        }
+    }).catch(err =>{
+        res.send({
+            ok:false,
+            message: "Error finding user"
+        })
+    })
 };
 
 userController.getProfileByUsername = (req, res, err) =>{
@@ -133,8 +161,24 @@ userController.getProfileByUsername = (req, res, err) =>{
     })
 };
 
-userController.updateProfile = () =>{
+userController.updateProfile = (req, res, err) =>{
+    let username = req.body.username
+    const updates = {
+        name: req.body.name,
+        avatar: req.body.avatar
+    }
 
+    Profile.update({userName: username}, updates)
+    .then(updates =>{
+        res.send({
+            ok: true
+        })
+    }).catch(err =>{
+        res.send({
+            ok:false,
+            message:"Error updating"
+        })
+    })
 };
 
 userController.deleteUser = async (req, res) =>{
