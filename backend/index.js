@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const multer = require('multer');
-// const cors = require('cors');
+const cors = require('cors');
 
 // Initializations
 const app = express();
@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
     }
 });
 app.use(multer({storage}).single('image'));
-// app.use(cors({origin:'URL ANGULAR'}));
+app.use(cors({origin:'http://localhost:4200'}));
 
 // Routes
 app.use('/api/products',require('./routes/products.routes'));
