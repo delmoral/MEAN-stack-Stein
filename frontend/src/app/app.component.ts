@@ -1,3 +1,5 @@
+// Utiliza Materialize css para estilo
+
 import { Component } from '@angular/core';
 
 @Component({

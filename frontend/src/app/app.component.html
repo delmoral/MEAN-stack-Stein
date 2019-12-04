@@ -1,6 +1,12 @@
-<nav class="nav-wrapper green">
-  <div class="container">
-    <a href="/" class="brand-logo">Lista de la compra</a>
+<nav>
+  <div class="nav-wrapper green">
+    <a href="#" class="brand-logo left">ListaApp</a>
+    <ul class="right ">
+      <li><a routerLink="/lista">Lista</a></li>
+      <li><a routerLink="/singin">Sing in</a></li>
+      <li><a routerLink="/login">Log in</a></li>
+    </ul>
   </div>
 </nav>
-<app-products></app-products>
+
+<router-outlet></router-outlet>
